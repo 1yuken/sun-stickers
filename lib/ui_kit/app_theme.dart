@@ -7,6 +7,7 @@ class AppTheme {
 
   static ThemeData lightTheme = ThemeData(
     useMaterial3: false,
+    fontFamily: 'Roboto',
     brightness: Brightness.light,
     scaffoldBackgroundColor: AppColor.primaryLight,
     appBarTheme: AppBarTheme(
@@ -14,7 +15,7 @@ class AppTheme {
       elevation: 0,
       iconTheme: const IconThemeData(color: Colors.black45),
       centerTitle: true,
-      titleTextStyle: AppTextStyle.h2Style,
+      titleTextStyle: AppTextStyle.h2Style.copyWith(fontFamily: 'Roboto'),
     ),
     textTheme: TextTheme(
       displayLarge: AppTextStyle.h1Style,
@@ -42,7 +43,7 @@ class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
+        backgroundColor: WidgetStateProperty.all<Color>(
           AppColor.accent,
         ),
       ),
@@ -58,6 +59,7 @@ class AppTheme {
 
   static ThemeData darkTheme = ThemeData(
     useMaterial3: false,
+    fontFamily: 'Roboto',
     brightness: Brightness.dark,
     scaffoldBackgroundColor: AppColor.primaryDark,
     appBarTheme: AppBarTheme(
@@ -66,7 +68,8 @@ class AppTheme {
       toolbarTextStyle: const TextStyle(color: Colors.white),
       centerTitle: true,
       iconTheme: const IconThemeData(color: Colors.white),
-      titleTextStyle: AppTextStyle.h2Style,
+      titleTextStyle: AppTextStyle.h2Style
+          .copyWith(fontFamily: 'Roboto', color: Colors.white),
     ),
     textTheme: TextTheme(
       displayLarge: AppTextStyle.h1Style.copyWith(color: Colors.white),
@@ -93,7 +96,7 @@ class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
+        backgroundColor: WidgetStateProperty.all<Color>(
           AppColor.accent,
         ),
       ),

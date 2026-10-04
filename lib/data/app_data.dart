@@ -6,7 +6,8 @@ import 'models/_models.dart';
 class AppData {
   const AppData._();
 
-  static const dummyText = "Lorem Ipsum is simply dummy text of the printing and typesetting "
+  static const dummyText =
+      "Lorem Ipsum is simply dummy text of the printing and typesetting "
       "industry. Lorem Ipsum has been the industry's standard dummy text ever "
       "since the 1500s, when an unknown printer took a galley of type and "
       "scrambled it to make a type specimen book. It has survived not only five "
@@ -16,7 +17,7 @@ class AppData {
       "with desktop publishing software like Aldus PageMaker including versions "
       "of Lorem Ipsum.";
 
-  static List<Sticker> stickers = [
+  static const List<Sticker> stickers = [
     Sticker(
       1,
       AppAsset.apple,
@@ -329,7 +330,7 @@ class AppData {
     )
   ];
 
-  static List<StickerCategory> categories = [
+  static const List<StickerCategory> categories = [
     StickerCategory(StickerType.all, true),
     StickerCategory(StickerType.toy, false),
     StickerCategory(StickerType.fauna, false),
@@ -337,12 +338,5 @@ class AppData {
     StickerCategory(StickerType.berry, false),
     StickerCategory(StickerType.fruit, false),
     StickerCategory(StickerType.other, false),
-  ];
-
-  static List<Sticker> cartItems = [stickers[0], stickers[1], stickers[2]];
-  static List<Sticker> favoriteItems = [
-    stickers[0]..isFavorite = true,
-    stickers[1]..isFavorite = true,
-    stickers[2]..isFavorite = true
   ];
 }

@@ -4,14 +4,13 @@ import '../../ui_kit/_ui_kit.dart';
 
 class CounterButton extends StatelessWidget {
   const CounterButton(
-      {Key? key,
+      {super.key,
       required this.onIncrementTap,
       required this.onDecrementTap,
       required this.label,
       this.padding = 10.0,
       this.size = const Size(36, 36),
-      this.orientation = Axis.horizontal})
-      : super(key: key);
+      this.orientation = Axis.horizontal});
 
   final VoidCallback onIncrementTap;
   final VoidCallback onDecrementTap;

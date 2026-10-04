@@ -1,147 +1,109 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import '../../data/_data.dart';
+import '../../states/sticker_action.dart';
+import '../../states/sticker_scope.dart';
 import '../../ui_kit/_ui_kit.dart';
 import '../widgets/_widgets.dart';
 
-class StickerDetail extends StatefulWidget {
-  const StickerDetail({super.key});
-
-  @override
-  State<StickerDetail> createState() => StickerDetailState();
-}
-
-class StickerDetailState extends State<StickerDetail> {
-  final sticker = AppData.stickers[0];
-
+class StickerDetail extends StatelessWidget {
+  const StickerDetail({super.key, required this.stickerId});
+  final int stickerId;
   @override
   Widget build(BuildContext context) {
+    final scope = StickerScope.of(context);
+    // Resolve by ID on every rebuild, so routes never hold an obsolete copy.
+    final sticker = scope.state.getStickerById(stickerId);
     return Scaffold(
-      appBar: _appBar(context),
-      body: Center(child: Image.asset(sticker.image, scale: 2)),
-      floatingActionButton: _floatingActionButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      bottomNavigationBar: _bottomAppBar(),
-    );
-  }
-
-  PreferredSizeWidget _appBar(BuildContext context) {
-    return AppBar(
-      leading: IconButton(
-        onPressed: () => Navigator.of(context).pop(),
-        icon: const Icon(Icons.arrow_back),
-      ),
-      title: Text(
-        'Sticker Detail Screen',
-        style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white),
-      ),
-      actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))],
-    );
-  }
-
-  Widget _floatingActionButton() {
-    return FloatingActionButton(
-      elevation: 0.0,
-      backgroundColor: AppColor.accent,
-      onPressed: () {},
-      child: sticker.isFavorite ? const Icon(AppIcon.heart) : const Icon(AppIcon.outlinedHeart),
-    );
-  }
-
-  Widget _bottomAppBar() {
-    return ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
+      appBar:
+          AppBar(title: Text(sticker.name, key: const ValueKey('detail-name'))),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+                child: Image.asset(sticker.image,
+                    height: 240, fit: BoxFit.contain)),
+            const SizedBox(height: 20),
+            Row(children: [
+              RatingBarIndicator(
+                rating: sticker.score,
+                itemBuilder: (_, __) =>
+                    const Icon(Icons.star, color: AppColor.yellow),
+                itemCount: 5,
+                itemSize: 20,
+              ),
+              const SizedBox(width: 12),
+              Text('${sticker.score} (${sticker.voter})',
+                  style: Theme.of(context).textTheme.titleMedium),
+            ]),
+            const SizedBox(height: 20),
+            Text('Description',
+                style: Theme.of(context).textTheme.displayMedium),
+            const SizedBox(height: 12),
+            Text(sticker.description,
+                style: Theme.of(context).textTheme.titleMedium),
+          ],
         ),
-        child: BottomAppBar(
-            child: SizedBox(
-                height: 300,
-                child: Container(
-                  color: Theme.of(context).brightness == Brightness.dark ? AppColor.dark : Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(30),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              RatingBar.builder(
-                                itemPadding: EdgeInsets.zero,
-                                itemSize: 20,
-                                initialRating: sticker.score,
-                                minRating: 1,
-                                direction: Axis.horizontal,
-                                allowHalfRating: true,
-                                itemCount: 5,
-                                glow: false,
-                                ignoreGestures: true,
-                                itemBuilder: (_, __) => const FaIcon(
-                                  FontAwesomeIcons.solidStar,
-                                  color: AppColor.yellow,
-                                ),
-                                onRatingUpdate: (rating) {
-                                  print('$rating');
-                                },
-                              ),
-                              const SizedBox(width: 15),
-                              Text(
-                                sticker.score.toString(),
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              const SizedBox(width: 5),
-                              Text(
-                                "(${sticker.voter})",
-                                style: Theme.of(context).textTheme.titleMedium,
-                              )
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "\$${sticker.price}",
-                                style: Theme.of(context).textTheme.displayLarge?.copyWith(color: AppColor.accent),
-                              ),
-                              CounterButton(
-                                onIncrementTap: () {},
-                                onDecrementTap: () {},
-                                label: Text(
-                                  sticker.quantity.toString(),
-                                  style: Theme.of(context).textTheme.displayLarge,
-                                ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                          Text(
-                            "Description",
-                            style: Theme.of(context).textTheme.displayMedium,
-                          ),
-                          const SizedBox(height: 15),
-                          Text(
-                            sticker.description,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: 30),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 45,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 30),
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                child: const Text("Add to cart"),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? AppColor.dark
+                : Colors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Text('\$${scope.state.stickerPrice(sticker)}',
+                    key: const ValueKey('detail-price'),
+                    style:
+                        AppTextStyle.h1Style.copyWith(color: AppColor.accent)),
+                CounterButton(
+                  onIncrementTap: () =>
+                      scope.dispatch(IncreaseQuantity(stickerId)),
+                  onDecrementTap: () =>
+                      scope.dispatch(DecreaseQuantity(stickerId)),
+                  label: Text('${sticker.quantity}',
+                      key: const ValueKey('detail-quantity'),
+                      style: Theme.of(context).textTheme.displayLarge),
+                ),
+              ]),
+              const SizedBox(height: 16),
+              Row(children: [
+                Expanded(
+                    child: SizedBox(
+                  height: 45,
+                  child: ElevatedButton(
+                    key: const ValueKey('add-to-cart'),
+                    onPressed: sticker.cart
+                        ? null
+                        : () => scope.dispatch(AddToCart(stickerId)),
+                    child: Text(sticker.cart ? 'Added to cart' : 'Add to cart'),
                   ),
-                ))));
+                )),
+                const SizedBox(width: 16),
+                IconButton(
+                  key: const ValueKey('toggle-favorite'),
+                  tooltip: sticker.isFavorite
+                      ? 'Remove from favorite'
+                      : 'Add to favorite',
+                  onPressed: () => scope.dispatch(ToggleFavorite(stickerId)),
+                  icon: Icon(
+                      sticker.isFavorite
+                          ? AppIcon.heart
+                          : AppIcon.outlinedHeart,
+                      color: AppColor.accent),
+                ),
+              ]),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -4,14 +4,19 @@ import '../../data/_data.dart';
 import '../_ui.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => HomeScreenState();
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  final List<Widget> screens = [const StickerList(), const CartScreen(), const FavoriteScreen(), const ProfileScreen()];
+  final List<Widget> screens = [
+    const StickerList(),
+    const CartScreen(),
+    const FavoriteScreen(),
+    const ProfileScreen()
+  ];
   int currentIndex = 0;
 
   void onTabTap(int index) {
@@ -36,9 +41,15 @@ class HomeScreenState extends State<HomeScreen> {
         items: AppData.bottomNavigationItems.map(
           (element) {
             return BottomNavigationBarItem(
-              icon: element.disableIcon,
+              icon: KeyedSubtree(
+                  key: ValueKey(
+                      'nav-${AppData.bottomNavigationItems.indexOf(element)}'),
+                  child: element.disableIcon),
               label: element.label,
-              activeIcon: element.enableIcon,
+              activeIcon: KeyedSubtree(
+                  key: ValueKey(
+                      'active-nav-${AppData.bottomNavigationItems.indexOf(element)}'),
+                  child: element.enableIcon),
             );
           },
         ).toList(),

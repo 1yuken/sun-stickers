@@ -1,0 +1,50 @@
+name: Flutter checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.5'
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze
+      - run: flutter test --reporter expanded
+  builds:
+    needs: checks
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        entry: [main, main_getx, main_bloc, main_cubit, main_mobx, main_redux, main_provider, main_riverpod]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.5'
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter build web --release --target lib/${{ matrix.entry }}.dart
+      - run: flutter build apk --debug --target lib/${{ matrix.entry }}.dart
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.entry }}-web
+          path: build/web
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.entry }}-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk

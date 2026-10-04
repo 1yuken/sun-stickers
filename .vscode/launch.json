@@ -1,0 +1,53 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Без библиотек",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart"
+    },
+    {
+      "name": "GetX",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_getx.dart"
+    },
+    {
+      "name": "BLoC",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_bloc.dart"
+    },
+    {
+      "name": "Cubit",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_cubit.dart"
+    },
+    {
+      "name": "MobX",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_mobx.dart"
+    },
+    {
+      "name": "Redux",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_redux.dart"
+    },
+    {
+      "name": "Provider",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_provider.dart"
+    },
+    {
+      "name": "Riverpod",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_riverpod.dart"
+    }
+  ]
+}
